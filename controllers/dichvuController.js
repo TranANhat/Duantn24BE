@@ -1,57 +1,49 @@
-import User from "../model/userModel.js"
-// For posting data into database 
-export const create = async(req, res)=>{
-    try {
-        const userData = new User( req.body);
-        const {email} = userData;
-        const userExist = await User.findOne({email})
-        if (userExist){
-            return res.status(400).json({message : "User already exist."})
-        }
-        const savedUser = await userData.save();
-        res.status(200).json(savedUser)
-    } catch (error) {
-        res.status(500).json({error : "Internal Server Error. "})
-    }
-}
+// controllers/dichvuController.js
+const DichvuModel = require('../models/dichvuModel');
 
-// Lấy tất cả người dùng từ data
-export const fetch = async (req, res)=>{
-    try {
-        const users = await User.find();
-        if(users.length === 0 ){
-            return res.status(404).json({message : "User not Found."})
-        }
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({error : " Internal Server Error. "})
-    }
-}
-// Cập nhật dữ liệu
-export const update = async (req, res)=>{
-    try {
-        const id = req.params.id;
-        const userExist = await User.findOne({_id:id})
-        if (!userExist){
-            return res.status(404).json({message : "User not found."})
-        }
-        const updateUser = await User.findByIdAndUpdate(id, req.body, {new : true});
-        res.status(201).json(updateUser);
-    } catch (error) {
-        res.status(500).json({error : " Internal Server Error. "})
-    }
-}
-// Xóa data
-export const deleteUser = async (req, res)=>{
-    try {
-        const id = req.params.id;
-        const userExist = await User.findOne({_id:id})
-        if(!userExist){
-            return res.status(404).json({message : " User Not Found. "})
-        }
-        await User.findByIdAndDelete(id);
-        res.status(201).json({message : " User deleted Successfully."})
-    } catch (error) {
-        res.status(500).json({error : " Internal Server Error. "})
-    }
-}
+const DichvuController = {
+  getAllDichvu: (req, res) => {
+    DichvuModel.getAllDichvu((err, results) => {
+      if (err) return res.status(500).send(err);
+      res.json(results);
+    });
+  },
+  createDichvu: (req, res) => {
+    const dichvu = { 
+      moTa: req.body.moTa, 
+      gia: req.body.gia, 
+      tenDichVu: req.body.tenDichVu 
+    };
+    DichvuModel.createDichvu(dichvu, (err, results) => {
+      if (err) return res.status(500).send(err);
+      res.json({ message: 'Dịch vụ đã được tạo thành công', dichvuId: results.insertId });
+    });
+  },
+  deleteDichvu: (req, res) => {
+    const dichvuID = req.params.id;
+    DichvuModel.deleteDichvu(dichvuID, (err, results) => {
+      if (err) return res.status(500).send(err);
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Dịch vụ không tồn tại' });
+      }
+      res.json({ message: 'Dịch vụ đã được xóa thành công' });
+    });
+  },
+  updateDichvu: (req, res) => {
+    const dichvuID = req.params.id;
+    const dichvu = { 
+      moTa: req.body.moTa, 
+      gia: req.body.gia, 
+      tenDichVu: req.body.tenDichVu 
+    };
+    DichvuModel.updateDichvu(dichvuID, dichvu, (err, results) => {
+      if (err) return res.status(500).send(err);
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Dịch vụ không tồn tại' });
+      }
+      res.json({ message: 'Dịch vụ đã được cập nhật thành công' });
+    });
+  }
+};
+
+module.exports = DichvuController;
