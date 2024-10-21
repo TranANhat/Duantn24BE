@@ -1,17 +1,23 @@
-import mongoose from "mongoose";
+// models/dichvuModel.js
+const db = require('../config/db');
 
-const userSchema = new mongoose.Schema({
-    name : {
-        type : String, 
-        required : true,
-    }, email : { 
-        type : String, 
-        required : true,
-    },
-    address : { 
-        type : String ,
-        required  :true
-    }
-})
+const DichvuModel = {
+  getAllDichvu: (callback) => {
+    const query = 'SELECT * FROM dichvu';
+    db.query(query, callback);
+  },
+  createDichvu: (dichvu, callback) => {
+    const query = 'INSERT INTO dichvu (moTa, gia, tenDichVu) VALUES (?, ?, ?)';
+    db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu], callback);
+  },
+  deleteDichvu: (id, callback) => {
+    const query = 'DELETE FROM dichvu WHERE id = ?';
+    db.query(query, [id], callback);
+  },
+  updateDichvu: (id, dichvu, callback) => {
+    const query = 'UPDATE dichvu SET moTa = ?, gia = ?, tenDichVu = ? WHERE id = ?';
+    db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu, id], callback);
+  },
+};
 
-export default mongoose.model("users",userSchema)
+module.exports = DichvuModel;
