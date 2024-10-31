@@ -12,7 +12,8 @@ const DichvuController = {
     const dichvu = { 
       moTa: req.body.moTa, 
       gia: req.body.gia, 
-      tenDichVu: req.body.tenDichVu 
+      tenDichVu: req.body.tenDichVu,
+      anhDichVu: req.body.anhDichVu // Thêm anhDichVu
     };
     DichvuModel.createDichvu(dichvu, (err, results) => {
       if (err) return res.status(500).send(err);
@@ -34,7 +35,8 @@ const DichvuController = {
     const dichvu = { 
       moTa: req.body.moTa, 
       gia: req.body.gia, 
-      tenDichVu: req.body.tenDichVu 
+      tenDichVu: req.body.tenDichVu,
+      anhDichVu: req.body.anhDichVu // Thêm anhDichVu
     };
     DichvuModel.updateDichvu(dichvuID, dichvu, (err, results) => {
       if (err) return res.status(500).send(err);
