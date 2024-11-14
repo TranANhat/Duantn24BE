@@ -15,8 +15,8 @@ const DichvuModel = {
     db.query(query, [id], callback);
   },
   updateDichvu: (id, dichvu, callback) => {
-    const query = 'UPDATE dichvu SET moTa = ?, gia = ?, tenDichVu = ? WHERE id = ?';
-    db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu, id], callback);
+    const query = 'UPDATE dichvu SET moTa = ?, gia = ?, tenDichVu = ?, anhDichVu = ? WHERE id = ?';
+    db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu, dichvu.anhDichVu, id], callback);
   },
 
 
