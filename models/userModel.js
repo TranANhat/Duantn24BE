@@ -10,8 +10,13 @@ const UserModel = {
     const query = 'INSERT INTO khachhang (username, email , phone, diaChi) VALUES (?, ? ,? ,?)';
     db.query(query, [user.username, user.email, user.phone, user.diaChi], callback);
   },
+
+  checkPhone: (phone, callback) => {
+    const query = ' SELECT * FROM khachhang WHERE phone=?';
+    db.query(query, [phone], callback)
+  },
   deleteUser: (id, callback) => {
-    const query = 'DELETE FROM users WHERE id= ?';
+    const query = 'DELETE FROM khachhang WHERE id= ?';
     db.query(query, [id], callback);
   },
   updateUser: (id, user, callback) => {

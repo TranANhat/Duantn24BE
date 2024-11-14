@@ -7,8 +7,8 @@ const DichvuModel = {
     db.query(query, callback);
   },
   createDichvu: (dichvu, callback) => {
-    const query = 'INSERT INTO dichvu (moTa, gia, tenDichVu) VALUES (?, ?, ?)';
-    db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu], callback);
+    const query = 'INSERT INTO dichvu (moTa, gia, tenDichVu , hinhanh) VALUES (?, ?, ? , ?)';
+    db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu, dichvu.hinhanh], callback);
   },
   deleteDichvu: (id, callback) => {
     const query = 'DELETE FROM dichvu WHERE id = ?';
@@ -18,6 +18,11 @@ const DichvuModel = {
     const query = 'UPDATE dichvu SET moTa = ?, gia = ?, tenDichVu = ? WHERE id = ?';
     db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu, id], callback);
   },
+
+
+
+
+
 };
 
 module.exports = DichvuModel;

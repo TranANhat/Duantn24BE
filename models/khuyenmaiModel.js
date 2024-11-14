@@ -6,17 +6,22 @@ const KhuyenmaiModel = {
     const query = 'SELECT * FROM khuyenmai';
     db.query(query, callback);
   },
-  
+
   createKhuyenmai: (khuyenmai, callback) => {
     const query = 'INSERT INTO khuyenmai (moTa, giamGia, maKhuyenMai, ngayBatDau, ngayKetThuc) VALUES (?, ?, ?, ?, ?)';
     db.query(query, [khuyenmai.moTa, khuyenmai.giamGia, khuyenmai.maKhuyenMai, khuyenmai.ngayBatDau, khuyenmai.ngayKetThuc], callback);
   },
-  
+
+  getKtraKhuyenMai: (maKhuyenMai, callback) => {
+    const query = 'SELECT * FROM khuyenmai where maKhuyenMai=? AND ngayBatDau <= NOW() AND ngayKetThuc => NOW()  ';
+    db.query(query, [maKhuyenMai], callback)
+
+  },
   deleteKhuyenmai: (id, callback) => {
     const query = 'DELETE FROM khuyenmai WHERE id = ?';
     db.query(query, [id], callback);
   },
-  
+
   updateKhuyenmai: (id, khuyenmai, callback) => {
     const query = 'UPDATE khuyenmai SET moTa = ?, giamGia = ?, maKhuyenMai = ?, ngayBatDau = ?, ngayKetThuc = ? WHERE id = ?';
     db.query(query, [khuyenmai.moTa, khuyenmai.giamGia, khuyenmai.maKhuyenMai, khuyenmai.ngayBatDau, khuyenmai.ngayKetThuc, id], callback);
