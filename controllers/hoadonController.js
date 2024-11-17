@@ -65,6 +65,16 @@ const hoadonController = {
             if (err) return res.status(500).send(err)
             res.status(200).send({ message: 'Đơn hàng đã được xóa thành công' });
         });
+    },
+
+    updateHoadonStatus: (req, res) => {
+        const { id } = req.params;
+        const { trangThai } = req.body; // Trạng thái mới (Đã xác nhận, Đã thanh toán, Đã hủy)
+
+        hoadonModel.updateHoadonStatus(id, trangThai, (err, result) => {
+            if (err) return res.status(500).send(err);
+            res.status(200).send({ message: `Trạng thái hóa đơn đã được cập nhật thành ${trangThai}` });
+        });
     }
 
 }

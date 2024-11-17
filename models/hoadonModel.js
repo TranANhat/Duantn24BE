@@ -23,6 +23,10 @@ const hoadonModel = {
                 callback(null, result);
             })
         })
+    },
+    updateHoadonStatus: (hoadonId, trangThai, callback) => {
+        const query = `UPDATE hoadon SET trangThai = ? WHERE id = ?`;
+        db.query(query, [trangThai, hoadonId], callback);
     }
 
 

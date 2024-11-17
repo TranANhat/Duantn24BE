@@ -6,9 +6,9 @@ const router = express.Router();
 router.get('/users', UserController.getAllUsers);
 // thêm kahachs hàng
 router.post('/users', UserController.createUser);
-// xóa khách  hàng
+
 router.delete('users/:id', UserController.deleteUser);
-// cập nhật khách hàng 
+
 router.put('/users/:id', UserController.updateUser);
 
 module.exports = router;

@@ -8,7 +8,7 @@ const ChiTietHoaDon = {
         });
     },
     getCTHDID: (req, res) => {
-        const hoaDon_id = req.params.id;
+        const hoaDon_id = req.params.id; // Lấy ID từ URL
         chitiethdModel.getCTHDById(hoaDon_id, (err, results) => {
             if (err) return res.status(500).send(err);
             if (results.length === 0) return res.status(404).json({ message: 'Hóa đơn không tìm thấy' });

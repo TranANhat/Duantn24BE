@@ -29,18 +29,30 @@ const chitiethdModel = {
         db.query(query, [hoaDon_id, dichVu_id, soLuong, dichVu_id, soLuong, dichVu_id], callback);
     },
 
-    getCTHDById: (req, res) => {
-        const hoaDon_id = req.params.id;  // Lấy ID hóa đơn từ tham số URL
-        chitiethdModel.getCTHDById(hoaDon_id, (err, results) => {
+    getCTHDById: (id, callback) => {
+        const query = `      SELECT 
+        chitiethoadon.*, 
+        khachhang.username AS tenKhachHang, 
+        khachhang.phone AS soDienThoai, 
+        khachhang.email AS email,
+        dichvu.tenDichVu AS DichVu
+    FROM 
+        chitiethoadon
+    JOIN 
+        hoadon ON chitiethoadon.hoaDon_id = hoadon.id
+    JOIN 
+        khachhang ON hoadon.khachhang_id = khachhang.id 
+	JOIN
+		dichvu ON chitiethoadon.dichVu_id = dichvu.id
+        where chitiethoadon.hoaDon_id = ?;`; // Query SQL theo ID
+        db.query(query, [id], (err, results) => {
             if (err) {
-                return res.status(500).send(err);
+                callback(err, null);
+            } else {
+                callback(null, results);
             }
-            if (results.length === 0) {
-                return res.status(404).json({ message: 'Hóa đơn không tìm thấy' });
-            }
-            res.json(results);
         });
-    },
+    }
 
 
 
