@@ -7,10 +7,10 @@ const hoadonModel = {
         JOIN khachhang ON hoadon.khachhang_id = khachhang.id`;
         db.query(query, callback);
     },
-    createHoadon: (khachhang_id, phuongThucThanhToan, callback) => {
-        const query = `INSERT INTO hoadon (khachhang_id, created_at, tongTien, phuongThucThanhToan, trangThai) 
-        VALUES (?, NOW(), 0, ?, 'Đang chờ xác nhận')`
-        db.query(query, [khachhang_id, phuongThucThanhToan], callback)
+    createHoadon: (khachhang_id, phuongThucThanhToan, ngayHen, tongTien, callback) => {
+        const query = `INSERT INTO hoadon (khachhang_id, created_at, tongTien, phuongThucThanhToan, trangThai, ngayHen) 
+        VALUES (?, NOW(), ?, ?, 'Đang chờ xác nhận', ?)`
+        db.query(query, [khachhang_id, tongTien, phuongThucThanhToan, ngayHen], callback)
     },
     deleteHoaDon: (hoadonId, callback) => {
         const deletecthd = `DELETE FROM chitiethoadon WHERE hoaDon_id = ?`;

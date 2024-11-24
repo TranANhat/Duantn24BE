@@ -13,7 +13,7 @@ const hoadonController = {
 
 
     createHoadon: (req, res) => {
-        const { username, phone, email, diaChi, phuongThucThanhToan, dichVu_id, soLuong = 1 } = req.body;
+        const { username, phone, email, diaChi, tongTien, phuongThucThanhToan, dichVu_id, soLuong = 1, ngayHen } = req.body;
 
 
         userModel.checkPhone(phone, (err, existingUser) => {
@@ -23,7 +23,7 @@ const hoadonController = {
 
                 const userid = user.id;
 
-                hoadonModel.createHoadon(userid, phuongThucThanhToan, (err, result) => {
+                hoadonModel.createHoadon(userid, phuongThucThanhToan, ngayHen, tongTien, (err, result) => {
                     if (err) return res.status(500).send(err)
 
                     const hoadonID = result.insertId;
@@ -40,7 +40,7 @@ const hoadonController = {
 
                     const userid = result.insertId;
 
-                    hoadonModel.createHoadon(userid, phuongThucThanhToan, (err, result) => {
+                    hoadonModel.createHoadon(userid, phuongThucThanhToan, ngayHen, tongTien, (err, result) => {
                         if (err) return res.status(500).send(err)
 
                         const hoadonID = result.insertId;
