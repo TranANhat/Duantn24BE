@@ -52,10 +52,40 @@ const chitiethdModel = {
                 callback(null, results);
             }
         });
-    }
+    },
+    // checkPhone: (phone, callback) => {
+    //     const query = `
+    //         SELECT 
+    //             chitiethoadon.*, 
+    //             hoadon.created_at AS ngayTaoHoaDon, 
+    //             khachhang.username AS tenKhachHang, 
+    //             khachhang.phone AS soDienThoai, 
+    //             khachhang.email AS email,
+    //             dichvu.tenDichVu AS DichVu
+    //         FROM 
+    //             chitiethoadon
+    //         JOIN 
+    //             hoadon ON chitiethoadon.hoaDon_id = hoadon.id
+    //         JOIN 
+    //             khachhang ON hoadon.khachhang_id = khachhang.id
+    //         JOIN
+	// 	        dichvu ON chitiethoadon.dichVu_id = dichvu.id
+    //         WHERE 
+    //             khachhang.phone = ?;
+    //     `;
 
+    //     db.query(query, [phone], (err, results) => {
+    //         if (err) {
+    //             console.error('Lỗi truy vấn checkPhone:', err);
+    //             callback(err, null); // Gửi lỗi về cho callback
+    //         } else {
+    //             callback(null, results); // Gửi kết quả về cho callback
+    //         }
+    //     });
+    // },
 
+    
 
 }
 
-module.exports = chitiethdModel
+module.exports = chitiethdModel;

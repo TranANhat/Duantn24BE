@@ -45,7 +45,10 @@ const UserController = {
       }
       res.json({ message: 'User updated uccessfully' });
     })
-  }
+  },
+
+  //---------------------
+ 
 };
 
 module.exports = UserController;

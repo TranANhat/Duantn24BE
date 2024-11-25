@@ -3,12 +3,13 @@ const app = express();
 const cors = require('cors')
 const PORT = process.env.PORT || 3000;
 
+
 const db = require('./config/db'); // Nhập file cấu hình kết nối
 const userRouters = require('./routes/userRoutes');
 const hoadonRouters = require('./routes/hoadonRoutes');
 const dichvuRouters = require('./routes/dichvuRoutes');
-const chitiethd = require('./routes/chitiethdRoutes')
-const khuyenmai = require('./routes/khuyenmaiRoutes')
+const chitiethd = require('./routes/chitiethdRoutes');
+const khuyenmai = require('./routes/khuyenmaiRoutes');
 
 app.use(cors());
 app.use('/uploads', express.static('uploads'))
