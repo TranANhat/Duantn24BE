@@ -1,18 +1,23 @@
-// routes/khuyenmaiRoutes.js
 const express = require('express');
-const KhuyenmaiController = require('../controllers/khuyenmaiController');
 const router = express.Router();
+const khuyenmaiController = require('../controllers/khuyenmaiController');
 
-// Lấy danh sách khuyến mãi
-router.get('/khuyenmai', KhuyenmaiController.getAllKhuyenmai);
+// Lấy tất cả mã khuyến mãi
+router.get('/khuyenmaii', khuyenmaiController.getAllKhuyenMai);
 
-// Thêm khuyến mãi
-router.post('/khuyenmai', KhuyenmaiController.createKhuyenmai);
+// Tạo mới mã khuyến mãi
+router.post('/khuyenmaii', khuyenmaiController.createKhuyenMai);
 
-// Xóa khuyến mãi
-router.delete('/khuyenmai/:id', KhuyenmaiController.deleteKhuyenmai);
+// Cập nhật mã khuyến mãi
+router.put('/khuyenmaii/:id', khuyenmaiController.updateKhuyenMai);
 
-// Cập nhật khuyến mãi
-router.put('/khuyenmai/:id', KhuyenmaiController.updateKhuyenmai);
+// Xóa mã khuyến mãi
+router.delete('/khuyenmaii/:id', khuyenmaiController.deleteKhuyenMai);
+
+// Áp dụng mã khuyến mãi vào hóa đơn        
+router.post('/apply', khuyenmaiController.applyKhuyenMai);
+
+router.get('/khuyenmaii/:sale', khuyenmaiController.checkKhuyenMai);
+
 
 module.exports = router;

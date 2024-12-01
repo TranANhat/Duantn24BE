@@ -1,31 +1,42 @@
-// models/khuyenmaiModel.js
 const db = require('../config/db');
 
-const KhuyenmaiModel = {
-  getAllKhuyenmai: (callback) => {
+const KhuyenMai = {
+  // Lấy tất cả mã khuyến mãi
+  getAll: (callback) => {
     const query = 'SELECT * FROM khuyenmai';
     db.query(query, callback);
   },
 
-  createKhuyenmai: (khuyenmai, callback) => {
-    const query = 'INSERT INTO khuyenmai (moTa, giamGia, maKhuyenMai, ngayBatDau, ngayKetThuc) VALUES (?, ?, ?, ?, ?)';
-    db.query(query, [khuyenmai.moTa, khuyenmai.giamGia, khuyenmai.maKhuyenMai, khuyenmai.ngayBatDau, khuyenmai.ngayKetThuc], callback);
+  // Lấy mã khuyến mãi theo tên mã
+  getByCode: (tenKhuyenMai, callback) => {
+    const query = 'SELECT * FROM khuyenmai WHERE tenKhuyenMai = ?';
+    db.query(query, [tenKhuyenMai], callback);
   },
 
-  getKtraKhuyenMai: (maKhuyenMai, callback) => {
-    const query = 'SELECT * FROM khuyenmai where maKhuyenMai=? AND ngayBatDau <= NOW() AND ngayKetThuc => NOW()  ';
-    db.query(query, [maKhuyenMai], callback)
-
+  // Tạo mã khuyến mãi mới
+  create: ({ moTa, tenKhuyenMai, ngayBatDau, ngayKetThuc, phanTram }, callback) => {
+    const query = `
+      INSERT INTO khuyenmai (moTa, tenKhuyenMai, ngayBatDau, ngayKetThuc, phanTram)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    db.query(query, [moTa, tenKhuyenMai, ngayBatDau, ngayKetThuc, phanTram], callback);
   },
-  deleteKhuyenmai: (id, callback) => {
+
+  // Cập nhật mã khuyến mãi
+  update: (id, { moTa, tenKhuyenMai, ngayBatDau, ngayKetThuc, phanTram }, callback) => {
+    const query = `
+      UPDATE khuyenmai
+      SET moTa = ?, tenKhuyenMai = ?, ngayBatDau = ?, ngayKetThuc = ?, phanTram = ?
+      WHERE id = ?
+    `;
+    db.query(query, [moTa, tenKhuyenMai, ngayBatDau, ngayKetThuc, phanTram, id], callback);
+  },
+
+  // Xóa mã khuyến mãi
+  delete: (id, callback) => {
     const query = 'DELETE FROM khuyenmai WHERE id = ?';
     db.query(query, [id], callback);
-  },
-
-  updateKhuyenmai: (id, khuyenmai, callback) => {
-    const query = 'UPDATE khuyenmai SET moTa = ?, giamGia = ?, maKhuyenMai = ?, ngayBatDau = ?, ngayKetThuc = ? WHERE id = ?';
-    db.query(query, [khuyenmai.moTa, khuyenmai.giamGia, khuyenmai.maKhuyenMai, khuyenmai.ngayBatDau, khuyenmai.ngayKetThuc, id], callback);
-  },
+  }
 };
 
-module.exports = KhuyenmaiModel;
+module.exports = KhuyenMai;

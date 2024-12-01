@@ -17,7 +17,7 @@ const UserController = {
   },
 
   deleteUser: (req, res) => {
-    const userID = req.params.id;  // 
+    const userID = req.params.id;
 
 
     UserModel.deleteUser(userID, (err, results) => {

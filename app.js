@@ -2,13 +2,14 @@ const express = require('express');
 const app = express();
 const cors = require('cors')
 const PORT = process.env.PORT || 3000;
-
+require('dotenv').config();
 
 const db = require('./config/db'); // Nhập file cấu hình kết nối
 const userRouters = require('./routes/userRoutes');
 const hoadonRouters = require('./routes/hoadonRoutes');
 const dichvuRouters = require('./routes/dichvuRoutes');
 const chitiethd = require('./routes/chitiethdRoutes');
+const authRouter = require('./routes/authRoutes')
 const khuyenmai = require('./routes/khuyenmaiRoutes');
 
 app.use(cors());
@@ -21,6 +22,7 @@ app.use('/api/cthd', chitiethd)
 app.use('/api/hd', hoadonRouters)
 app.use('/api/dv', dichvuRouters)
 app.use('/api/km', khuyenmai)
+app.use('/api/dn', authRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

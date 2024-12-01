@@ -7,10 +7,10 @@ const hoadonModel = {
         JOIN khachhang ON hoadon.khachhang_id = khachhang.id`;
         db.query(query, callback);
     },
-    createHoadon: (khachhang_id, phuongThucThanhToan, callback) => {
-        const query = `INSERT INTO hoadon (khachhang_id, created_at, tongTien, phuongThucThanhToan, trangThai) 
-        VALUES (?, NOW(), 0, ?, 'Đang chờ xác nhận')`
-        db.query(query, [khachhang_id, phuongThucThanhToan], callback)
+    createHoadon: (khachhang_id, phuongThucThanhToan, ngayHen, tongTien, callback) => {
+        const query = `INSERT INTO hoadon (khachhang_id, created_at, tongTien, phuongThucThanhToan, trangThai, ngayHen) 
+        VALUES (?, NOW(), ?, ?, 'Đang chờ xác nhận', ?)`
+        db.query(query, [khachhang_id, tongTien, phuongThucThanhToan, ngayHen], callback)
     },
     deleteHoaDon: (hoadonId, callback) => {
         const deletecthd = `DELETE FROM chitiethoadon WHERE hoaDon_id = ?`;
@@ -30,12 +30,10 @@ const hoadonModel = {
     },
     getHoadonById: (hoadonId, callback) => {
         const query = `
-            
-            FROM 
-                hoadon
-            WHERE 
-                hoadon.id = ?;
-        `;
+        SELECT * 
+        FROM hoadon
+        WHERE id = ?;
+    `;
         db.query(query, [hoadonId], (err, results) => {
             if (err) {
                 console.error('Lỗi khi lấy hóa đơn:', err);
@@ -82,6 +80,62 @@ const hoadonModel = {
     `;
         db.query(query, [hoadonId, comment, hoadonId, created_at], callback);
     },
+    getFeedbackByHoadonId: (hoadonId, callback) => {
+        const query = `
+            SELECT id, hoadon_id, comment, created_at
+            FROM feedback
+            WHERE hoadon_id = ?
+            ORDER BY created_at DESC
+            LIMIT 1
+        `;
+        db.query(query, [hoadonId], callback);
+    },
+
+    getAllFeedback: (callback) => {
+        const query = `
+    SELECT 
+        feedback.id AS feedback_id,
+        hoadon.id AS hoadon_id,
+        khachhang.username AS ten_khachhang,
+        feedback.comment,
+        DATE(feedback.created_at) AS created_at,  
+        dichvu.tenDichVu AS ten_dichvu          
+    FROM 
+    feedback
+    JOIN 
+        hoadon ON feedback.hoadon_id = hoadon.id
+    JOIN 
+        khachhang ON hoadon.khachhang_id = khachhang.id
+    JOIN 
+        chitiethoadon ON hoadon.id = chitiethoadon.hoaDon_id 
+    JOIN
+        dichvu ON chitiethoadon.dichVu_id = dichvu.id  
+    WHERE 
+        feedback.created_at IS NOT NULL
+    ORDER BY 
+        feedback.created_at DESC; 
+
+
+        `;
+        db.query(query, (err, result) => {
+            if (err) {
+                console.error('Lỗi khi thực hiện truy vấn:', err);
+                callback(err, null);
+            } else {
+                console.log('Kết quả truy vấn:', result);
+                callback(null, result);
+            }
+        });
+    },
+    deleteFeedback: (id, callback) => {
+        const query = 'DELETE FROM feedback WHERE id = ?';
+        db.query(query, [id], callback);
+    },
+
+
+
+
+
 }
 
 module.exports = hoadonModel;

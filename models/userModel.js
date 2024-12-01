@@ -16,8 +16,14 @@ const UserModel = {
     db.query(query, [phone], callback)
   },
   deleteUser: (id, callback) => {
-    const query = 'DELETE FROM khachhang WHERE id= ?';
-    db.query(query, [id], callback);
+    const query = 'DELETE FROM khachhang WHERE id = ?';
+    db.query(query, [id], (err, results) => {
+      if (err) {
+        console.error('Lỗi khi xóa người dùng:', err);
+        return callback(err);
+      }
+      callback(null, results);
+    });
   },
 
   updateUser: (id, user, callback) => {
