@@ -18,7 +18,11 @@ const DichvuModel = {
     const query = 'UPDATE dichvu SET moTa = ?, gia = ?, tenDichVu = ?, anhDichVu = ? WHERE id = ?';
     db.query(query, [dichvu.moTa, dichvu.gia, dichvu.tenDichVu, dichvu.anhDichVu, id], callback);
   },
-
+  searchDichvu: (name, callback) => {
+    const query = 'SELECT * FROM dichvu WHERE tenDichVu LIKE ?';
+    const searchName = `%${name}%`;
+    db.query(query, [searchName], callback);
+  }
 
 
 

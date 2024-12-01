@@ -62,7 +62,22 @@ const DichvuController = {
       }
       res.json({ message: 'Dịch vụ đã được cập nhật thành công' });
     });
+  },
+  searchDichvuByName: (req, res) => {
+    const tenDichVu = req.query.tenDichVu || '';
+    DichvuModel.searchDichvu(tenDichVu, (err, results) => {
+      if (err) {
+        console.error('Chi tiết lỗi:', err.sqlMessage || err.message || err);
+        res.status(500).json({
+          error: 'Lỗi khi tìm kiếm dịch vụ theo tên',
+          details: err.sqlMessage || err.message || err
+        });
+      } else {
+        res.json(results);
+      }
+    });
   }
+
 };
 
 module.exports = DichvuController;

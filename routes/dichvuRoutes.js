@@ -12,5 +12,7 @@ router.post('/dichvu', upload.single('hinhanh'), DichvuController.createDichvu);
 router.delete('/dichvu/:id', DichvuController.deleteDichvu);
 // Cập nhật dịch vụ
 router.put('/dichvu/:id', DichvuController.updateDichvu);
+//tìm kiếm dịch vụ
+router.get('/dichvu/search', DichvuController.searchDichvuByName)
 
 module.exports = router;
