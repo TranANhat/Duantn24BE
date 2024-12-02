@@ -11,6 +11,8 @@ router.delete('/users/:id', UserController.deleteUser);
 
 router.put('/users/:id', UserController.updateUser);
 
+router.get('/user/phone', UserController.searchKhachHang)
+
 
 
 module.exports = router;

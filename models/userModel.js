@@ -12,7 +12,7 @@ const UserModel = {
     db.query(query, [user.username, user.email, user.phone, user.diaChi], callback);
   },
   checkPhone: (phone, callback) => {
-    const query = 'DELETE FROM khachhang WHERE phone = ?';
+    const query = ' SELECT * FROM khachhang WHERE phone=?';
     db.query(query, [phone], callback)
   },
   deleteUser: (id, callback) => {
@@ -27,9 +27,14 @@ const UserModel = {
   },
 
   updateUser: (id, user, callback) => {
-    const query = 'UPDATE khachang  set username=?  , email=? , phone=? , diaChi=? WHERE id= ?';
+    const query = 'UPDATE khachhang  set username=?  , email=? , phone=? , diaChi=? WHERE id= ?';
     db.query(query, [id, user.username, user.email, user.phone, user.diaChi], callback);
   },
+  searchKhachHang: (phone, callback) => {
+    const query = 'SELECT * FROM khachhang where phone = ?';
+    db.query(query, [phone], callback);
+
+  }
 
 
 }

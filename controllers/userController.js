@@ -47,8 +47,31 @@ const UserController = {
     })
   },
 
+  searchKhachHang: (req, res) => {
+    const phone = req.query.phone || req.body.number;
+
+    if (!phone) {
+      return res.status(400).json({ message: 'Số điện thoại không được cung cấp' });
+    }
+
+    UserModel.searchKhachHang(phone, (err, results) => {
+      if (err) {
+        console.error('Chi tiết lỗi:', err.sqlMessage || err.message || err);
+        res.status(500).json({
+          error: 'Lỗi khi tìm kiếm khách hàng theo SĐT',
+          details: err.sqlMessage || err.message || err
+        });
+      } else {
+        if (results.length === 0) {
+          return res.status(404).json({ message: 'Không tìm thấy khách hàng với số điện thoại này' });
+        }
+        res.json(results);
+      }
+    });
+  }
+
   //---------------------
- 
+
 };
 
 module.exports = UserController;

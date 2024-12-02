@@ -15,6 +15,8 @@ router.delete('/hoadon/:id', hoadonController.deleteHoaDon);
 // Cập nhật trạng thái hóa đơn
 router.put("/hoadon/:id/status", hoadonController.updateHoadonStatus);
 
+router.get('/hoadon/search', hoadonController.searchHoadonByUsername);
+
 // Lấy hóa đơn theo số điện thoại
 router.get('/hoadon/check/:phone', hoadonController.PhoneHoadon);
 

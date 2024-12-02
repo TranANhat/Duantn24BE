@@ -15,17 +15,19 @@ const chitiethdModel = {
         JOIN 
             khachhang ON hoadon.khachhang_id = khachhang.id `;
         db.query(query, callback);
-      },
-      createCTHD: (hoaDon_id, dichVu_id, soLuong = 1, thanhTien, callback) => {
-        console.log(hoaDon_id, dichVu_id, soLuong, thanhTien);
-    
+    },
+    createCTHD: (hoaDon_id, dichVu_id, soLuong = 1, thanhTien, callback) => {
+        // Kiểm tra thanhTien có phải là số không
+        if (typeof thanhTien !== 'number') {
+            return callback(new Error('Giá trị thanhTien phải là số'), null);
+        }
+
         const query = `
-                INSERT INTO chitiethoadon (hoaDon_id, dichVu_id, soLuong, thanhTien, donGia) 
-                VALUES (?, ?, ?, ?, ?);
-            `;
-    
+            INSERT INTO chitiethoadon (hoaDon_id, dichVu_id, soLuong, thanhTien, donGia) 
+            VALUES (?, ?, ?, ?, ?);
+        `;
         db.query(query, [hoaDon_id, dichVu_id, soLuong, thanhTien, thanhTien], callback);
-      },
+    },
 
     getCTHDById: (id, callback) => {
         const query = `      SELECT 
@@ -67,7 +69,7 @@ const chitiethdModel = {
     //         JOIN 
     //             khachhang ON hoadon.khachhang_id = khachhang.id
     //         JOIN
-	// 	        dichvu ON chitiethoadon.dichVu_id = dichvu.id
+    // 	        dichvu ON chitiethoadon.dichVu_id = dichvu.id
     //         WHERE 
     //             khachhang.phone = ?;
     //     `;
@@ -82,7 +84,7 @@ const chitiethdModel = {
     //     });
     // },
 
-    
+
 
 }
 

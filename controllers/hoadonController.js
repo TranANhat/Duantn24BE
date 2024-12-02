@@ -15,22 +15,26 @@ const hoadonController = {
     createHoadon: (req, res) => {
         const { username, phone, email, diaChi, tongTien, phuongThucThanhToan, dichVu_id, soLuong = 1, ngayHen } = req.body;
 
+
         userModel.checkPhone(phone, (err, existingUser) => {
             if (err) return res.status(500).send(err);
             const user = existingUser[0];
             if (user) {
+
                 const userid = user.id;
 
                 hoadonModel.createHoadon(userid, phuongThucThanhToan, ngayHen, tongTien, (err, result) => {
                     if (err) return res.status(500).send(err)
 
                     const hoadonID = result.insertId;
-                    chitiethdModel.createCTHD(hoadonID, dichVu_id, soLuong, (err) => {
-                        if (err) return res.status(500).send(err);
+                    const thanhTien = tongTien / soLuong;
+                    chitiethdModel.createCTHD(hoadonID, dichVu_id, soLuong, thanhTien, (err, result) => {
+                        if (err) return res.status(500).send(err)
 
-                        res.status(200).send({ message: "Đơn hàng đã được tạo" });
-                    });
-                });
+                        res.status(200).send({ message: 'Đơn hàng đã được tạo' })
+                    })
+
+                })
             } else {
                 userModel.createUser({ username, phone, email, diaChi }, (err, result) => {
                     if (err) return res.status(500).send(err);
@@ -41,15 +45,20 @@ const hoadonController = {
                         if (err) return res.status(500).send(err)
 
                         const hoadonID = result.insertId;
-                        chitiethdModel.createCTHD(hoadonID, dichVu_id, soLuong, tongTien, (err) => {
-                            if (err) return res.status(500).send(err);
+                        const thanhTien = tongTien / soLuong;
+                        chitiethdModel.createCTHD(hoadonID, dichVu_id, soLuong, thanhTien, (err, result) => {
+                            if (err) return res.status(500).send(err)
 
-                            res.status(200).send({ message: "Đơn hàng đã được tạo" });
-                        });
-                    });
-                });
+                            res.status(200).send({ message: 'Đơn hàng đã được tạo' })
+                        })
+
+                    })
+                })
+
             }
-        });
+
+        })
+
     },
 
     // Xóa hóa đơn
@@ -131,7 +140,7 @@ const hoadonController = {
 
     getFeedbackByHoadonId: (req, res) => {
         const hoadonId = req.params.id;
-    
+
         hoadonModel.getFeedbackByHoadonId(hoadonId, (err, feedback) => {
             if (err) {
                 console.error("Lỗi khi lấy phản hồi:", err);
@@ -140,16 +149,16 @@ const hoadonController = {
                     error: err,
                 });
             }
-    
+
             if (!feedback || feedback.length === 0) {
                 return res.status(404).json({
                     message: "Không tìm thấy phản hồi nào cho hóa đơn này.",
                 });
             }
-    
+
             // Lấy phần comment và created_at từ phản hồi
             const { id, hoadon_id, comment, created_at } = feedback[0];
-    
+
             return res.status(200).json({
                 message: "Phản hồi đã được lấy thành công.",
                 feedback: {
@@ -173,25 +182,42 @@ const hoadonController = {
     // Controller để xóa đánh giá theo hoadonId
     deleteFeedbackById: (req, res) => {
         const feedbackID = req.params.id;
-    
-        hoadonModel.deleteFeedback(feedbackID,(err, results) => {
+
+        hoadonModel.deleteFeedback(feedbackID, (err, results) => {
             if (err) {
                 if (err.code === 'ER_ROW_IS_REFERENCED_2') {
-                  return res.status(400).json({
-                    message: 'Không thể xóa dịch vụ vì đang có hóa đơn liên kết với đánh giá này.'
-                  })
+                    return res.status(400).json({
+                        message: 'Không thể xóa dịch vụ vì đang có hóa đơn liên kết với đánh giá này.'
+                    })
                 }
                 return res.status(500).send(err);
-        
-              }
-        
-              if (results.affectedRows === 0) {
+
+            }
+
+            if (results.affectedRows === 0) {
                 return res.status(404).json({ message: 'đánh giá không tồn tại' });
-              }
-              res.json({ message: 'đánh giá đã được xóa thành công' });
+            }
+            res.json({ message: 'đánh giá đã được xóa thành công' });
         });
-      
-},
+
+    },
+
+    searchHoadonByUsername: (req, res) => {
+        const { username } = req.query; // Nhận tên khách hàng từ query string
+
+        hoadonModel.SearchHoadonByUsername(username, (err, results) => {
+            if (err) {
+                console.error('Lỗi khi tìm kiếm hóa đơn:', err);
+                return res.status(500).send('Lỗi khi tìm kiếm hóa đơn');
+            }
+
+            if (results.length === 0) {
+                return res.status(404).send('Không tìm thấy hóa đơn cho khách hàng này');
+            }
+
+            res.json(results); // Trả về kết quả tìm kiếm
+        });
+    },
 };
 
 module.exports = hoadonController;

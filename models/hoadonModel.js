@@ -132,6 +132,33 @@ const hoadonModel = {
         db.query(query, [id], callback);
     },
 
+    SearchHoadonByUsername: (username, callback) => {
+        const query = `
+            SELECT 
+                hoadon.id AS hoadonId,
+                hoadon.tongTien,
+                hoadon.phuongThucThanhToan,
+                hoadon.ngayHen,
+                hoadon.trangThai,
+                khachhang.username AS tenKhachHang
+            FROM 
+                hoadon
+            JOIN 
+                khachhang ON hoadon.khachhang_id = khachhang.id
+            WHERE 
+                khachhang.username LIKE ?;
+        `;
+
+        db.query(query, [`%${username}%`], (err, results) => {
+            if (err) {
+                console.error('Lỗi khi tìm kiếm hóa đơn theo tên khách hàng:', err);
+                callback(err, null);
+            } else {
+                callback(null, results); // Trả về kết quả tìm kiếm
+            }
+        });
+    }
+
 
 
 
